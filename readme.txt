@@ -1,26 +1,19 @@
-Приложения для облачного Битрикс24 для компании Юнибикс
-по вопросам - Зарзанд Мхитарян pro3@unibix.ru, zmkhitaryan88@gmail.com
-*---------------------------------------------------------*
+A platform for managing your own applications on bitrix24 cloud
 
-Приложение работает посредством передачи параметра _REQUEST[action]
-например:
- приложение премируемые задачи работает по адресу https://b24.unibix.ru?action=bonus_tasks
- приложение документы работает по адресу https://b24.unibix.ru?action=documents
- и т.д.
+Apllication works on  _REQUEST[action] parameter (your.domain?action=your_action)
+if there is no _REQUEST[action] parameter, it will cause fatal error
+Apllication is written in mvc architecture and consists of model view and controller files which are located in app directory
 
-Отсутсвие параметра _REQUEST[action] вызывает ошибку
+Files naming requriements
+	- model must be named like model-application_name.php and must be located in app/model/directory
+	- controller must be named like controller-application_name.php and must be located in app/controller/directory
+	- view file can be name as you wish and with .tpl extension example: project_edit.tpl
 
-Приложение состоит из файлов model.php controller.php и view.tpl которые находятся соответственно в папках model, controller и view
-Требования к наименованию файлов:
-	- файл model.php должен именоваться следующим способом: model-название_приложения.php
-	- файл controller.php должен именоваться следующим способом: controller-название_приложения.php
-	- файл view может именоваться как угодно, только с расширением tpl, например: project_edit.tpl 
-В модели должен создаваться класс class model_имя_приложения extends model {}
-B controller.php обязательно должна быть следующая структура: global $b24u; - это объект модели
+model-application_name.php must be class application_name extends model {}
+in controller file there must be  global $b24u; line. it is an object of main model class
 
-html страницу выводит controller
+html outputs controller controller
 
-В файле model.php основной класс model где обявлены методы общие для всех приложении
+in helpers folder are locating auxiliary libraries and classes such as tcpdf, database management class, mail helper class etc.
 
-в папке helpers находятся вспомогательные классы для подключения БД, отправки почты, tcpdf и т.д.
 
