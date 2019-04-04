@@ -1,4 +1,5 @@
 <?php 
+/*main model*/
 class model {
     public $dbh;                                // db object
     public $chief_ids      = array(1);          // heads id
@@ -124,7 +125,9 @@ class model {
     * returns current user data
     * @return array with user data
     */
-    public function get_current_user($url, $params){
+    public function get_current_user($url = '', $params = array()){
+        if(empty($url))$url = 'http://' . $_REQUEST['DOMAIN'] . '/rest/user.current.json';
+        if(empty($params['auth']))$params['auth'] = $_REQUEST['AUTH_ID'];
         $user = $this->get_response($url, $params)['result'];
         $user['FULL_NAME'] = $user['NAME'] . ' ' . $user['LAST_NAME']; 
         return $user;
@@ -322,15 +325,15 @@ class model {
     		include ROOT_DIR . '/helpers/tcpdf/tcpdf.php';
 			include ROOT_DIR . '/helpers/tcpdf_extended_classes.php';
     	}
-    	$this->pdf = new TCPDF_EXTENDED;
-        $this->pdf->SetFont('Arial', '', 12);
-        $this->pdf->SetHeaderFont(array('Arial', '', 10));
-        $this->pdf->SetFooterFont(array('Arial', '', 12));
-        $this->pdf->SetMargins(PDF_PADDING_LEFT, PDF_PADDING_TOP, PDF_PADDING_RIGHT, true);
-        $this->pdf->AddPage();
-        $this->pdf->writeHTML($html, true, false, true, false, '');
+    	$pdf = new TCPDF_EXTENDED;
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetHeaderFont(array('Arial', '', 10));
+        $pdf->SetFooterFont(array('Arial', '', 12));
+        $pdf->SetMargins(PDF_PADDING_LEFT, PDF_PADDING_TOP, PDF_PADDING_RIGHT, true);
+        $pdf->AddPage();
+        $pdf->writeHTML($html, true, false, true, false, '');
 
-        $this->pdf->Output(getcwd().'/'.$filename, 'F');
+        $pdf->Output(getcwd().'/'.$filename, 'F');
     }
 
     function rus_to_lat($text){
@@ -360,6 +363,18 @@ class model {
             'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
         );
         return strtr($text, $characters);
+    }
+
+    /**
+    * loads helper / creates model::helper_helper_name property 
+    * @param string $helper helper class and file name
+    */
+    function load_helper($helper) {
+        $helper_name = 'helper_' . $helper;
+        if(is_file(ROOT_DIR . '/helpers/' . $helper . 'php'))include ROOT_DIR . '/helpers/' . $helper . 'php';
+        if(class_exists($helper)){
+          $this->$helper_name = new $helper;  
+        }
     }
 
 
