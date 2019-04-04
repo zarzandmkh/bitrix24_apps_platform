@@ -1,4 +1,4 @@
-A platform for managing your own applications on bitrix24 cloud
+A platform for managing your own applications on REST api on bitrix24 cloud
 
 Apllication works on  _REQUEST[action] parameter (your.domain?action=your_action)
 if there is no _REQUEST[action] parameter, it will cause fatal error
